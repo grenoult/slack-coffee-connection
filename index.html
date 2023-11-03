@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slack User Pairing</title>
+</head>
+<body>
+    <h1>Slack User Pairing</h1>
+    <p>1. Go to the related Slack channel → Participants → Settings → "Copy member names"</p>
+    <p>2. Paste the list below, click the button and paste the result in Slack, press Alt+Enter or ⌘+Enter to go to next line so that users can be tagged.</p>
+    <textarea id="userInput" placeholder="Paste comma-separated list of users (firstname lastname)"></textarea>
+    <button onclick="generatePairs()">Generate Pairs</button>
+
+    <h2>Paired Users:</h2>
+    <textarea id="result" readonly></textarea>
+
+    <script>
+        function generatePairs() {
+            const userInput = document.getElementById('userInput').value;
+            const users = userInput.split(',').map(user => user.trim());
+
+            const pairedUsers = [];
+
+            // Shuffle list
+            users.sort((a, b) => 0.5 - Math.random());
+
+            for (let i = 0; i < users.length; i += 2) {
+                const firstUser = users[i];
+                const secondUser = users[i + 1];
+                let pair = `@${firstUser} ☕️ @${secondUser}`;
+
+                if (users[i+2] && users[i+3] === undefined) {
+                    // Odd number of users: the last pair is a 3 people pair
+                    pair = `@${firstUser} ☕️ @${secondUser} ☕️ @${users[i+2]}`;
+                    pairedUsers.push(pair);
+                    break;
+                }
+                pairedUsers.push(pair);
+            }
+
+            document.getElementById('result').value = pairedUsers.join('\n');
+        }
+    </script>
+</body>
+</html>
